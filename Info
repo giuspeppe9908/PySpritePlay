@@ -1,0 +1,4 @@
+Questo gioco è sviluppato in python 3.10 
+L'intento del gioco è quello di sperimentare con la libreria Tkinter.
+Il gioco è semplice una volta avviato il giocatore (sprite verde) lo si può muovere liberamente, dopo 10 passi viene creato un frutto da raggiungere
+Buon divertimento!
