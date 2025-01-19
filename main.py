@@ -1,11 +1,13 @@
+import random
 import tkinter as tk
 from tkinter import messagebox
-import random
+from PIL import Image, ImageTk  # Per caricare immagini in formati diversi da .png
 
 countMoves = 0
 countMaxMoves = 10
 fruit = None
 points = 0  
+image_path = "trophy.png"
 # Funzione per gestire il movimento del personaggio
 def move_character(event):
     global countMoves
@@ -21,6 +23,30 @@ def move_character(event):
     countMoves += 1
     checkPos()
 
+def showWinning():
+    custom_window = tk.Toplevel(window)
+    custom_window.title("Congratulazioni!")
+    custom_window.geometry("200x200")
+    try:
+                trophy_image = Image.open(image_path)
+                img_resized = trophy_image.resize((100, 100))
+                trophy_photo = ImageTk.PhotoImage(img_resized)
+    except:
+                messagebox.showerror("Errore", "Immagine non trovata.")
+                return
+    
+    trophy_label = tk.Label(custom_window, image=trophy_photo)
+    trophy_label.image = trophy_photo  # Necessario per mantenere una reference all'immagine
+    trophy_label.pack(pady=20)
+
+    # Crea una label per il messaggio
+    message_label = tk.Label(custom_window, text="Hai vinto! Congratulazioni!", font=("Arial", 14))
+    message_label.pack(pady=10)
+
+    # Aggiungi un bottone per chiudere la finestra
+    close_button = tk.Button(custom_window, text="Chiudi", command=custom_window.destroy)
+    close_button.pack(pady=10)
+    
 # Funzione per controllare la posizione e generare il frutto
 def checkPos():
     global countMoves, fruit, points
@@ -59,7 +85,8 @@ def checkPos():
         ):
             points += 1
             points_label.config(text=f"Punteggio: {points}")
-            messagebox.showinfo("Hai vinto!", f"Hai raggiunto il frutto! Punteggio: {points}")
+            showWinning()
+            #messagebox.showinfo("Hai vinto!", f"Hai raggiunto il frutto! Punteggio: {points}")
             canvas.delete(fruit)
 
 window = tk.Tk()
@@ -71,6 +98,7 @@ canvas = tk.Canvas(window, width=600, height=600, bg="lightblue")
 canvas.pack()
 x, y = 300, 300 
 player = canvas.create_rectangle(x - 20, y - 20, x + 20, y + 20, fill="green")
+
 
 window.bind("<Up>", move_character)
 window.bind("<Down>", move_character)
